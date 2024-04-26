@@ -52,15 +52,32 @@ impl<T: Clone> Node<T> {
 }
 
 // evaluates the expression formed by the operator and 2 elements
-fn evaluate(a: f64, b: f64, operator: String) -> f64 {
+fn evaluate(cache: &mut Stack<f64>, operator: String) -> f64 {
+    let safe_pop = |c: &mut Stack<f64>| match c.pop() {
+        None => panic!("too few arguments supplied for {}", operator),
+        Some(x) => x,
+    };
+    let b = safe_pop(cache);
     match operator.as_str() {
-        "+" => a + b,
-        "-" => a - b,
-        "*" | "x" => a * b,
-        "/" => a / b,
-        "%" => a % b,
-        "^" => a.powf(b),
-        "log" => a.log(b),
+        "+" => safe_pop(cache) + b,
+        "-" => safe_pop(cache) - b,
+        "*" | "x" => safe_pop(cache) * b,
+        "/" => safe_pop(cache) / b,
+        "%" => safe_pop(cache) % b,
+        "^" => safe_pop(cache).powf(b),
+        "log" => safe_pop(cache).log(b),
+        "sin" => b.sin(),
+        "cos" => b.cos(),
+        "tan" => b.tan(),
+        "csc" => 1.0 / b.sin(),
+        "sec" => 1.0 / b.cos(),
+        "cot" => 1.0 / b.tan(),
+        "arcsin" => b.asin(),
+        "arccos" => b.acos(),
+        "arctan" => b.atan(),
+        "arccsc" => 1.0 / b.asin(),
+        "arcsec" => 1.0 / b.acos(),
+        "arccot" => 1.0 / b.atan(),
         _ => panic!("{} is not an operator", operator),
     }
 }
@@ -69,15 +86,14 @@ fn evaluate(a: f64, b: f64, operator: String) -> f64 {
 // notation
 pub fn solve(expression: Vec<String>) -> f64 {
     let mut cache: Stack<f64> = Stack::new();
-    for o in expression {
-        match o.parse::<f64>() {
+    for v in expression {
+        match v.parse::<f64>() {
             Ok(ok) => cache.push(ok),
-            Err(_) if o == "e" => cache.push(std::f64::consts::E),
-            Err(_) if o == "pi" => cache.push(std::f64::consts::PI),
+            Err(_) if v == "e" => cache.push(std::f64::consts::E),
+            Err(_) if v == "pi" => cache.push(std::f64::consts::PI),
             Err(_) => {
-                if cache.len() < 2 { panic!("too few arguments for {}", o); }
-                let (b, a) = (cache.pop().unwrap(), cache.pop().unwrap());
-                cache.push(evaluate(a, b, o));
+                let result = evaluate(&mut cache, v);
+                cache.push(result);
             }
         }
     }
