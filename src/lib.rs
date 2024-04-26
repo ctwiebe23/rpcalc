@@ -57,6 +57,7 @@ fn evaluate(cache: &mut Stack<f64>, operator: String) -> f64 {
         None => panic!("too few arguments supplied for {}", operator),
         Some(x) => x,
     };
+    let rad = |r: f64| r % (2.0 * std::f64::consts::PI);
     let b = safe_pop(cache);
     match operator.as_str() {
         "+" => safe_pop(cache) + b,
@@ -66,18 +67,18 @@ fn evaluate(cache: &mut Stack<f64>, operator: String) -> f64 {
         "%" => safe_pop(cache) % b,
         "^" => safe_pop(cache).powf(b),
         "log" => safe_pop(cache).log(b),
-        "sin" => b.sin(),
-        "cos" => b.cos(),
-        "tan" => b.tan(),
-        "csc" => 1.0 / b.sin(),
-        "sec" => 1.0 / b.cos(),
-        "cot" => 1.0 / b.tan(),
-        "arcsin" => b.asin(),
-        "arccos" => b.acos(),
-        "arctan" => b.atan(),
-        "arccsc" => 1.0 / b.asin(),
-        "arcsec" => 1.0 / b.acos(),
-        "arccot" => 1.0 / b.atan(),
+        "sin" => rad(b).sin(),
+        "cos" => rad(b).cos(),
+        "tan" => rad(b).tan(),
+        "csc" => 1.0 / rad(b).sin(),
+        "sec" => 1.0 / rad(b).cos(),
+        "cot" => 1.0 / rad(b).tan(),
+        "arcsin" => rad(b).asin(),
+        "arccos" => rad(b).acos(),
+        "arctan" => rad(b).atan(),
+        "arccsc" => 1.0 / rad(b).asin(),
+        "arcsec" => 1.0 / rad(b).acos(),
+        "arccot" => 1.0 / rad(b).atan(),
         _ => panic!("{} is not an operator", operator),
     }
 }
