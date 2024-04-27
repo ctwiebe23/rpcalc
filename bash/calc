@@ -1,0 +1,31 @@
+#!/bin/bash
+
+# =========================[ CALC ]=========================
+# | AUTHOR: mozzie                                         |
+# | ---                                                    |
+# | reverse polish notation calculator written in rust     |
+# ==========================================================
+
+PATH='/media/mozzie/Bulk600Gb2023-06-21/Projects/rpcalc/target/release/'
+
+if ! [ -f "$PATH/rpcalc" ]
+then
+  echo "ERROR: could not locate rpcalc binary"
+  exit 1
+fi
+
+cd "$PATH"
+
+if [ "${#@}" = "0" ]
+then
+  read -p "Evaluate (q to quit): " EXPR
+  while ! [ "$EXPR" = "q" ]
+  do
+    echo "=>  $(./rpcalc "$EXPR")"
+    read -p "Evaluate (q to quit): " EXPR
+  done
+else
+  echo "=>  $(./rpcalc "$@")"
+fi
+
+exit 0
