@@ -95,6 +95,9 @@ pub fn solve(expression: Vec<String>) -> Result<f64, String> {
         match v.parse::<f64>() {
             Ok(ok) => cache.push(ok),
             Err(_) if v == "e" => cache.push(std::f64::consts::E),
+            Err(_) if v == "G" => cache.push(6.6743E-11),
+            Err(_) if v == "g" => cache.push(9.81),
+            Err(_) if v == "c" => cache.push(299792458.0),
             Err(_) if v == "pi" => cache.push(std::f64::consts::PI),
             Err(_) => {
                 let result = evaluate(&mut cache, v)?;

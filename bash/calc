@@ -7,6 +7,7 @@
 # ==========================================================
 
 PATH='/media/mozzie/Bulk600Gb2023-06-21/Projects/rpcalc/target/release/'
+PROMPT='calc$  '
 
 if ! [ -f "$PATH/rpcalc" ]
 then
@@ -18,11 +19,15 @@ cd "$PATH"
 
 if [ "${#@}" = "0" ]
 then
-  read -p "Evaluate (q to quit): " EXPR
+  ANS='nil'
+
+  read -p "$PROMPT" EXPR
   while ! [ "$EXPR" = "q" ]
   do
-    echo "=>  $(./rpcalc "$EXPR")"
-    read -p "Evaluate (q to quit): " EXPR
+    ANS="$(./rpcalc "${EXPR//ans/$ANS}")"
+    echo "=>  $ANS"
+
+    read -p "$PROMPT" EXPR
   done
 else
   echo "=>  $(./rpcalc "$@")"

@@ -10,7 +10,7 @@ fn main() {
             .map(|s| s.to_string())
             .collect());
     }
-    
+
     match solve(expression) {
         Ok(ok) => print!("{ok}\n"),
         Err(e) => print!("{e}\n"),
