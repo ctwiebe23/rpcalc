@@ -51,6 +51,23 @@ impl<T: Clone> Node<T> {
     fn get_next(&self) -> NodePtr<T> { self.next.clone() }
 }
 
+// takes the factorial of n, returning an error if n is negative
+fn factorial(n: i128) -> Result<f64, String> {
+
+    if n < 0 {
+        return Err(format!("cannot take factorial of negative number {n}"));
+    }
+
+    let mut result: i128 = 1;
+    let limit: i128 = n + 1;
+
+    for i in 1..limit {
+        result *= i;
+    }
+
+    return Ok(result as f64);
+}
+
 // evaluates the expression formed by the operator and 2 elements
 fn evaluate(cache: &mut Stack<f64>, operator: String) -> Result<f64, String> {
 
@@ -81,6 +98,7 @@ fn evaluate(cache: &mut Stack<f64>, operator: String) -> Result<f64, String> {
         "arccsc" => Ok(1.0 / b.asin()),
         "arcsec" => Ok(1.0 / b.acos()),
         "arccot" => Ok(1.0 / b.atan()),
+        "!" => factorial(b as i128),
         _ => Err(format!("{operator} is not an operator")),
     }
 }
