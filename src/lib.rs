@@ -51,21 +51,29 @@ impl<T: Clone> Node<T> {
     fn get_next(&self) -> NodePtr<T> { self.next.clone() }
 }
 
-// takes the factorial of n, returning an error if n is negative
-fn factorial(n: i128) -> Result<f64, String> {
+// rounds the given number n to the given number of decimal points
+fn rnd(n: f64, precision: f64) -> f64 {
 
-    if n < 0 {
+    let exp: f64 = 10_f64.powf(precision.round());
+
+    (n * exp).round() / exp
+}
+
+// takes the factorial of n, returning an error if n is negative
+fn factorial(n: f64) -> Result<f64, String> {
+
+    if n < 0.0 {
         return Err(format!("cannot take factorial of negative number {n}"));
     }
 
-    let mut result: i128 = 1;
-    let limit: i128 = n + 1;
+    let mut result: f64 = 1.0;
+    let limit: u32 = (n as u32) + 1;
 
     for i in 1..limit {
-        result *= i;
+        result *= i as f64;
     }
 
-    return Ok(result as f64);
+    Ok(result)
 }
 
 // evaluates the expression formed by the operator and 2 elements
@@ -85,7 +93,10 @@ fn evaluate(cache: &mut Stack<f64>, operator: String) -> Result<f64, String> {
         "%" => Ok(safe_pop(cache)? % b),
         "^" => Ok(safe_pop(cache)?.powf(b)),
         "log" => Ok(safe_pop(cache)?.log(b)),
+        "rnd" => Ok(rnd(safe_pop(cache)?, b)),
         "ln" => Ok(b.ln()),
+        "log2" => Ok(b.log2()),
+        "log10" => Ok(b.log10()),
         "sin" => Ok(b.sin()),
         "cos" => Ok(b.cos()),
         "tan" => Ok(b.tan()),
@@ -98,7 +109,7 @@ fn evaluate(cache: &mut Stack<f64>, operator: String) -> Result<f64, String> {
         "arccsc" => Ok(1.0 / b.asin()),
         "arcsec" => Ok(1.0 / b.acos()),
         "arccot" => Ok(1.0 / b.atan()),
-        "!" => factorial(b as i128),
+        "!" => factorial(b.round()),
         _ => Err(format!("{operator} is not an operator")),
     }
 }

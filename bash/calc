@@ -9,28 +9,34 @@
 PATH='/media/mozzie/Bulk600Gb2023-06-21/Projects/rpcalc/target/release/'
 PROMPT='calc$  '
 
-if ! [ -f "$PATH/rpcalc" ]
-then
+if [ ! -f "$PATH/rpcalc" ]; then
   echo "ERROR: could not locate rpcalc binary"
   exit 1
 fi
 
 cd "$PATH"
 
-if [ "${#@}" = "0" ]
-then
+if [ ${#@} = 0 ]; then
   ANS='nil'
+  DEF='nil'
 
   read -p "$PROMPT" EXPR
-  while ! [ "$EXPR" = "q" ]
-  do
-    ANS="$(./rpcalc "${EXPR//ans/$ANS}")"
-    echo "=>  $ANS"
+
+  while [ ! "$EXPR" = q ]; do
+
+    if [[ "$EXPR" =~ ^"def ".* ]]; then
+      DEF="${EXPR/def /}"
+    else
+      EXPR="${EXPR//fn/$DEF}"
+      ANS=$(./rpcalc "${EXPR//ans/$ANS}")
+      echo "=>  $ANS"
+    fi
 
     read -p "$PROMPT" EXPR
+
   done
 else
-  echo "=>  $(./rpcalc "$@")"
+  echo "$(./rpcalc "$@")"
 fi
 
 exit 0
