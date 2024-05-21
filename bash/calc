@@ -23,7 +23,6 @@ if [ ${#@} = 0 ]; then
   read -p "$PROMPT" EXPR
 
   while [ ! "$EXPR" = q ]; do
-
     if [[ "$EXPR" =~ ^"def ".* ]]; then
       DEF="${EXPR/def /}"
     else
@@ -33,7 +32,6 @@ if [ ${#@} = 0 ]; then
     fi
 
     read -p "$PROMPT" EXPR
-
   done
 else
   echo "$(./rpcalc "$@")"
