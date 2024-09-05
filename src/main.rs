@@ -6,8 +6,8 @@ fn main() {
 
     for a in args {
         expression.append(&mut a.split(" ")
-            .map(|s| s.to_string())
-            .collect());
+                                .map(|s| s.to_string())
+                                .collect());
     }
 
     match solve(expression) {
