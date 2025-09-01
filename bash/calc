@@ -13,28 +13,28 @@ PROMPT='calc$  '
 
 cd "$PATH"
 
-if [ ${#@} = 0 ]
+if [ ${#@} = '0' ]
 then
-  ANS='nil'
-  DEF='nil'
-
-  read -p "$PROMPT" EXPR
-
-  while [ ! "$EXPR" = q ]
-  do
-    if [[ "$EXPR" =~ ^"def ".* ]]
-    then
-      DEF="${EXPR/def /}"
-    else
-      EXPR="${EXPR//fn/$DEF}"
-      ANS=$(./rpcalc "${EXPR//ans/$ANS}")
-      echo "=>  $ANS"
-    fi
+    ANS='nil'
+    DEF='nil'
 
     read -p "$PROMPT" EXPR
-  done
+
+    while [ ! "$EXPR" = q ]
+    do
+        if [[ "$EXPR" =~ ^"def ".* ]]
+        then
+            DEF="${EXPR/def /}"
+        else
+            EXPR="${EXPR//fn/$DEF}"
+            ANS="$(./rpcalc "${EXPR//ans/$ANS}")"
+            echo "  ==>  $ANS"
+        fi
+
+        read -p "$PROMPT" EXPR
+    done
 else
-  echo "$(./rpcalc "$@")"
+    echo "$(./rpcalc "$@")"
 fi
 
 exit 0
