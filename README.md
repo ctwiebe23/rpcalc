@@ -1,6 +1,6 @@
 # NAME
 
-rpcalc - reverse postfix notation calculator
+rpcalc - reverse polish notation calculator
 
 # SYNOPSIS
 
