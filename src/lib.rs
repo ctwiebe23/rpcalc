@@ -1,7 +1,3 @@
-// mozzie
-//
-// contains both a stack and a postfix calculator
-
 type NodePtr<T> = Option<Box<Node<T>>>;
 
 // simple implementation of the standard stack data structure
@@ -82,6 +78,7 @@ fn factorial(n: f64) -> Result<f64, String> {
 
 // evaluates the expression formed by the operator and 2 elements
 fn evaluate(cache: &mut Stack<f64>, operator: String) -> Result<f64, String> {
+    // safely removes the next value from the stack
     let safe_pop = |stack: &mut Stack<f64>| match stack.pop() {
         None => Err(format!("too few arguments for {operator}")),
         Some(x) => Ok(x),
@@ -118,6 +115,17 @@ fn evaluate(cache: &mut Stack<f64>, operator: String) -> Result<f64, String> {
     }
 }
 
+// returns true if the string consists only of whitespace, else returns false
+fn blank(value: &String) -> bool {
+    for char in value.chars() {
+        if char != ' ' && char != '\t' && char != '\n' {
+            return false;
+        }
+    }
+
+    true
+}
+
 // solves the expression represented by a vector of strings in reverse polish
 // notation
 pub fn solve(expression: Vec<String>) -> Result<f64, String> {
@@ -131,6 +139,7 @@ pub fn solve(expression: Vec<String>) -> Result<f64, String> {
             Err(_) if v == "g"  => cache.push(9.81),
             Err(_) if v == "c"  => cache.push(299792458.0),
             Err(_) if v == "pi" => cache.push(std::f64::consts::PI),
+            Err(_) if blank(&v) => continue,
             Err(_) => {
                 let result: f64 = evaluate(&mut cache, v)?;
                 cache.push(result)

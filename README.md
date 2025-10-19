@@ -9,7 +9,7 @@ rpcalc - reverse polish notation calculator
 # DESCRIPTION
 
 A postfix calculator built in rust, with a companion bash script for a CLI.
-When ran with no arguments, it enters a calculator "shell" which can exited
+When ran with no arguments, it enters a calculator "shell" which can be exited
 with "q".
 
 When inside this shell, you can save functions or constants by starting a line
@@ -101,7 +101,7 @@ g
 :   earth's gravity, 9.81
 
 c
-:   speed of light, 2.71828
+:   speed of light, 299792458
 
 pi
 :   mathematical pi, 3.14159

@@ -1,6 +1,7 @@
 [package]
 name = "rpcalc"
-version = "0.1.0"
+version = "1.0.0"
 edition = "2021"
-
-[dependencies]
+authors = ["C Wiebe <ctwiebe23@gmail.com"]
+description = "Reverse polish notation calculator"
+license = "MIT"

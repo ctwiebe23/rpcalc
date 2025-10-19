@@ -1,29 +1,28 @@
 #!/bin/bash
 
 # =========================[ CALC ]=========================
-# | AUTHOR: mozzie                                         |
+# | AUTHOR: C Wiebe <ctwiebe23@gmail.com>                  |
+# | DATE  : SEP 04 2024                                    |
 # | ---                                                    |
 # | reverse polish notation calculator written in rust     |
 # ==========================================================
 
-PATH='/media/mozzie/Bulk600Gb2023-06-21/Projects/rpcalc/target/release/'
+PATH='nil'  # enter the path to the folder that holds the rpcalc binary here
 PROMPT='calc$  '
 
-[ ! -f "$PATH/rpcalc" ] && echo "ERROR: rpcalc binary not found" && exit 1
+[ "$PATH" = 'nil' ]     && echo 'ERROR: path to rpcalc binary not provided.  define it in the bash script' && exit 0
+[ ! -f "$PATH/rpcalc" ] && echo "ERROR: $PATH/rpcalc does not exist"                                       && exit 1
 
 cd "$PATH"
 
-if [ ${#@} = '0' ]
-then
+if [ ${#@} = '0' ]; then
     ANS='nil'
     DEF='nil'
 
     read -p "$PROMPT" EXPR
 
-    while [ ! "$EXPR" = q ]
-    do
-        if [[ "$EXPR" =~ ^"def ".* ]]
-        then
+    while [ ! "$EXPR" = q ]; do
+        if [[ "$EXPR" =~ ^"def ".* ]]; then
             DEF="${EXPR/def /}"
         else
             EXPR="${EXPR//fn/$DEF}"
